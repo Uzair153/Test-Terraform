@@ -33,7 +33,7 @@ module "Autoscaling" {
   ami_id                    = var.ami_id
   instance_type             = var.instance_type
   vpc_zone_identifier       = [module.aws_vpc.Pub_subnet_id_1, module.aws_vpc.Pub_subnet_id_2]
-  key                       = file("${path.module}/key-tf.pub")
+  key                       = file("${path.module}/modules/Auto_Scaling_Group/key-tf.pub")
   key_name                  = var.key_name
   ports                     = var.ports
   SG_tag                    = var.SG_tag
