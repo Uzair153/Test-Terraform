@@ -1,9 +1,21 @@
 
 resource "aws_vpc" "vpc_test" {
   cidr_block = var.vpc_cidr
+
+
   tags = {
     Name = "${var.vpc_tag}"
   }
+}
+resource "aws_cloudwatch_log_group" "vpc_flow_logs" {
+  name              = "/aws/vpc/${var.vpc_tag}/flow-logs"
+  retention_in_days = 14
+}
+
+resource "aws_flow_log" "vpc_flow_log" {
+  vpc_id          = aws_vpc.vpc_test.id
+  traffic_type    = "ALL"
+  log_destination = aws_cloudwatch_log_group.vpc_flow_logs.arn
 }
 
 resource "aws_internet_gateway" "IGW" {
