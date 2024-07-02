@@ -1,6 +1,6 @@
 resource "aws_lb" "lb" {
   name               = var.lb_name
-  internal           = false
+  internal           = true
   load_balancer_type = "network"
   subnets            = var.lb_subnets
 
