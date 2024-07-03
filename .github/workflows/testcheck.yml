@@ -37,8 +37,22 @@ jobs:
         chmod +x tfsec-linux-amd64
         sudo mv tfsec-linux-amd64 /usr/local/bin/tfsec
 
-      #       - name: tfsec action
-      # uses: aquasecurity/tfsec-action@v1.0.3
-    
+    # - name: tfsec action
+    #   uses: aquasecurity/tfsec-action@v1.0.3
+
     - name: Run tfsec
       run: tfsec --tfvars-file=terraform.tfvars
+
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: us-west-2
+
+    - name: Terraform Plan
+      run: terraform plan -out=tfplan
+
+    - name: Terraform Apply
+      if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+      run: terraform apply -input=false tfplan
